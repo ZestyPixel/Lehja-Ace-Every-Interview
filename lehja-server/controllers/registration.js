@@ -1,20 +1,38 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
+const tryCatch = require('../middlewares/tryCatch');
+const sanitize = require('mongo-sanitize');
+const check = require('../config/zod');
 
-async function register(req, res){
-    try{
-        const { email, password } = req.body;
-        
-        const checkIfExists = await User.findOne({email}); //Complete this logic !!
+async function registeration(req, res){
+    console.log(req.body);
+    const data = sanitize(req.body); //sanitize is used to prevent NoSQL injection attacks. 
+//It removes any keys that start with $ or contain a . from the input object.    
 
-        const newUser = new User({
-            email: email,
-            password: password,
+    const checkData = check.safeParse(data);
+
+    if(!checkData.success){
+        const error = checkData.error.issues;
+        const errors = error.map((element)=>({
+            message: element.message,
+        }));
+        console.log(errors);
+        return res.json({
+            errors: errors,
         });
-
-        const data = await newUser.save();
-        console.log(data);
-    }catch(error){
-        console.log(error);
     }
+    const { name, email, password } = data;
+    const checkIfExists = await User.findOne({email}); //Complete this logic !!
+
+    const newUser = new User({
+        name: name,
+        email: email,
+        password: password,
+    });
+
+    const newUserData = await newUser.save();
+    console.log(newUserData);
+    res.json({message: "sucess"});
 }
+
+module.exports= registeration ;
