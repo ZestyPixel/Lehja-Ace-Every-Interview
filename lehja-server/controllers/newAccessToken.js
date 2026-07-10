@@ -19,7 +19,7 @@ async function newAccessToken(req, res){
             message: "Token generated"
         });
     }catch(error){
-        return res.json({
+        return res.status(401).json({
             message: error.message
         })
     }

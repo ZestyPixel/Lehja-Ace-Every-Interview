@@ -32,7 +32,7 @@ async function registeration(req, res){
 
     const newUserData = await newUser.save();
     console.log(newUserData);
-    res.json({message: "sucess"});
+    res.status(201).json({message: "sucess"});
 }
 
 module.exports= registeration ;

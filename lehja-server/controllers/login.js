@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const generateTokens = require('../config/generateTokens');
 
 async function login(req, res){
-        console.log('hellosdasd')
+    console.log('hellosdasd');
 
     const { email, password } = req.body;
     const user = await User.findOne({email});

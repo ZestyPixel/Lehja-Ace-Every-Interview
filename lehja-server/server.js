@@ -12,7 +12,7 @@ connectDB();
 app.use(express.json()); //This middleware is used to parse incoming requests with JSON.
 app.use(cors({
     origin: ['http://localhost:5173',],
-    credentials: true, //This allows cookies to be sent with requests from the specified origin
+    credentials: true, //Without this option, the browser will not send cookies with requests to the server.
 }));
 app.use(cookieParser());
 
